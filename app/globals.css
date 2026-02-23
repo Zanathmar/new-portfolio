@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+.hover-card {
+  @apply hover:shadow-[-8px_8px_0_0_rgb(0,0,0)] hover:translate-x-2 hover:-translate-y-2 transition duration-300 ease-in-out;
+}
+
+.stroke-text {
+  text-shadow: 1.5px 1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px -1.5px 0 #000;
+}
+
+@keyframes fly-1 {
+  from { transform: translateY(0.1em);}
+  to   { transform: translateY(-0.1em);}
+}
+
+.btn-send .svg-wrapper {
+  display: block;
+  transition: transform 0.3s ease-in-out;
+}
+.btn-send:hover .svg-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+.btn-send svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+.btn-send:hover svg {
+  transform: translateX(3.3em) rotate(45deg) scale(1.1);
+}
+.btn-send span {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s cubic-bezier(.86,-0.01,.15,1.01);
+}
+.btn-send:hover span {
+  transform: translateX(10em);
+}
+.btn-send:active {
+  transform: scale(0.95);
+}
