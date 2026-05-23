@@ -43,7 +43,7 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="flex flex-col gap-12 px-4 py-10 md:px-6 md:flex-row md:items-start lg:px-24 lg:py-15">
+    <section id="contact" className="flex bg-[#f5f5f5] flex-col gap-12 px-4 py-10 md:px-6 md:flex-row md:items-start lg:px-24 lg:py-15">
       <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-12 w-full">
         <div className="w-full md:w-1/2 max-w-lg">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">

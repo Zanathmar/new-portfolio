@@ -17,7 +17,7 @@ const Experience = () => {
   ];
 
   return (
-    <section id="experiences" className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-12 sm:py-16 lg:px-8">
+    <section id="experiences" className="min-h-screen bg-[#f5f5f5] flex flex-col items-center justify-center px-4 py-12 sm:py-16 lg:px-8">
       <div className="text-center mb-8 sm:mb-12 lg:mb-16 max-w-2xl">
         <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-black mb-3 tracking-tight">Experience</h2>
         <div className="w-12 h-[3px] bg-black mx-auto mb-4"></div>

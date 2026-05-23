@@ -77,7 +77,7 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="px-4 py-20 tablet:px-6 desktop:px-20 bg-gradient-to-b from-gray-50 to-white">
+    <section id="projects" className="px-4 py-20 tablet:px-6 desktop:px-20 bg-[#f5f5f5]">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-5xl desktop:text-7xl font-light tracking-tight mb-6">

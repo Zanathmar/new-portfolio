@@ -20,7 +20,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section id="home" className="flex flex-col gap-12 px-4 py-10 tablet:px-6 tablet:flex-row-reverse tablet:items-center desktop:px-20 desktop:py-15">
+    <section id="home" className="bg-[#f5f5f5] flex flex-col gap-12 px-4 py-10 tablet:px-6 tablet:flex-row-reverse tablet:items-center desktop:px-20 desktop:py-15">
       <div className="tablet:w-1/2 flex justify-end">
         <Image
           src="/assets/Profile.png"
