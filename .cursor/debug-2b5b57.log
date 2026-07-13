@@ -1,0 +1,8 @@
+{"sessionId":"2b5b57","hypothesisId":"E","location":"Shuffle.jsx:useGSAP","message":"useGSAP effect entry / guard","data":{"hasRef":true,"hasText":true,"fontsLoaded":false},"timestamp":1783906065705}
+{"sessionId":"2b5b57","hypothesisId":"B","location":"Shuffle.jsx:fonts","message":"fonts status at mount","data":{"status":"loaded"},"timestamp":1783906065709}
+{"sessionId":"2b5b57","hypothesisId":"A","location":"Shuffle.jsx:st.create","message":"ScrollTrigger created; isActive check","data":{"start":"top 100%-=100px","stIsActive":true,"progress":0.5209125475285171},"timestamp":1783906065744}
+{"sessionId":"2b5b57","hypothesisId":"E","location":"Shuffle.jsx:useGSAP","message":"useGSAP effect entry / guard","data":{"hasRef":true,"hasText":true,"fontsLoaded":true},"timestamp":1783906065734}
+{"sessionId":"2b5b57","hypothesisId":"A","location":"Shuffle.jsx:create","message":"ScrollTrigger onEnter create() FIRED","data":{"start":"top 100%-=100px"},"timestamp":1783906065736}
+{"sessionId":"2b5b57","hypothesisId":"D","location":"Shuffle.jsx:build","message":"SplitText chars measured","data":{"charCount":9,"firstWidth":48.03125},"timestamp":1783906065740}
+{"sessionId":"2b5b57","hypothesisId":"D","location":"Shuffle.jsx:play","message":"play() strip count","data":{"stripCount":9},"timestamp":1783906065744}
+{"sessionId":"2b5b57","hypothesisId":"A","location":"PreloadScreen.jsx:handleShuffleComplete","message":"onShuffleComplete callback reached preloader","data":{"alreadyFinished":false},"timestamp":1783906067794}
