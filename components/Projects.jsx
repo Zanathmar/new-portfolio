@@ -5,10 +5,11 @@ import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Github } from 'lucide-react';
 
 const projects = [
-  { title: "Portfolio Website", description: "My previous personal portfolio website built using HTML, CSS and JavaScript", image: "/assets/images/Project1.png", github: "#", tech: ["HTML", "CSS", "JavaScript"] },
-  { title: "Expense Tracker App", description: "A modern expense tracker application with user authentication, category management, and real-time analytics.", image: "/assets/images/project2.png", github: "#", tech: ["Laravel", "Inertia", "Tailwind CSS", "MySql"] },
-  { title: "E-Library App", description: "A modern e-library application with user authentication, book search, and real-time book management.", image: "/assets/images/project3.png", github: "#", tech: ["Laravel", "Tailwind CSS", "MySql"] },
-  { title: "Payroll App", description: "A modern payroll application with user authentication, employee management, and real-time analytics.", image: "/assets/images/project4.png", github: "#", tech: ["Laravel", "Tailwind CSS", "MySql"] },
+  { title: "Escape Website", description: "Built a full-stack Islamic podcast and event platform (Next.js, Supabase, Tailwind CSS, TypeScript)", image: "/assets/images/project5.png", github: "https://github.com/akmallfhn/escape", tech: ["Next.js", "Tailwind CSS", "Supabase"] },
+  { title: "Portfolio Website", description: "My previous personal portfolio website built using HTML, CSS and JavaScript", image: "/assets/images/project1.png", github: "#", tech: ["HTML", "CSS", "JavaScript"] },
+  { title: "Expense Tracker App", description: "A modern expense tracker application with user authentication, category management, and real-time analytics.", image: "/assets/images/project2.png", github: "https://github.com/Zanathmar/CuanKu", tech: ["Laravel", "Inertia", "Tailwind CSS", "MySql"] },
+  { title: "E-Library App", description: "A modern e-library application with user authentication, book search, and real-time book management.", image: "/assets/images/project3.png", github: "https://github.com/Zanathmar/e-library-skl", tech: ["Laravel", "Tailwind CSS", "MySql"] },
+  { title: "Payroll App", description: "A modern payroll application with user authentication, employee management, and real-time analytics.", image: "/assets/images/project4.png", github: "https://github.com/Zanathmar/Payroll-app", tech: ["Laravel", "Tailwind CSS", "MySql"] },
 ];
 
 const ProjectCard = ({ project, index }) => (
