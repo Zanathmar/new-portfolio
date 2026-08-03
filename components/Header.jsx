@@ -19,12 +19,12 @@ const Header = () => {
       }`}
     >
       <header
-        className={`pointer-events-auto w-full bg-white transition-all duration-500 hover:-translate-y-0.5 ${
+        className={`font-jakarta pointer-events-auto w-full bg-white transition-all duration-500 hover:-translate-y-0.5 ${
           scrolled
             ? 'max-w-4xl rounded-full border-[3px] border-black shadow-[6px_6px_0px_#000] hover:shadow-[8px_8px_0px_#000]'
             : 'max-w-full rounded-none border-b-[3px] border-black hover:shadow-[0_4px_0px_#000]'
         }`}
-        style={{ fontFamily: "'Space Mono', monospace" }}
+        
       >
         <div className="flex items-center justify-between px-8 py-4 gap-4">
 
