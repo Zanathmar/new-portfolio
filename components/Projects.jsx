@@ -78,12 +78,23 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="px-4 py-20 tablet:px-6 desktop:px-20 bg-[#f5f5f5]">
+    <section id="projects" className="min-h-screen
+        bg-[#f4f4f4]
+        rounded-t-[50px]
+        sm:rounded-t-[70px]
+        flex
+        flex-col
+        items-center
+        justify-center
+        px-0
+        py-16
+        sm:px-6
+        lg:px-8 ">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-5xl desktop:text-7xl font-light tracking-tight mb-6">
             Featured{' '}
-            <span className="font-black bg-gradient-to-r from-black to-gray-600 bg-clip-text text-transparent">Projects</span>
+            <span className="font-black bg-black bg-clip-text text-transparent">Projects</span>
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">A collection of my recent work showcasing modern web development practices</p>
         </div>

@@ -14,6 +14,7 @@ const Experience = () => {
     { company: "SMAN 78 Jakarta", role: "IT Trainer", period: "February 2025", type: "Volunteer", description: "Instructed 10 classes including more than 110 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "110+", classes: 10, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
     { company: "Pondok Pesantren Qurrota A'yun", role: "IT Trainer", period: "March 2025", type: "Volunteer", description: "Instructed 6 classes including more than 80 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "80+", classes: 6, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
     { company: "SMAN 8 Jakarta", role: "IT Trainer", period: "May 2025", type: "Volunteer", description: "Instructed 7 classes including more than 100 students in fundamental web development using HTML, CSS, and JavaScript for 1 week.", students: "100+", classes: 7, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
+    { company: "SMAN 17 Jakarta", role: "IT Trainer", period: "May 2026", type: "Volunteer", description: "Instructed 6 classes including more than 150 students in fundamental web development using HTML, CSS, and JavaScript for 1 week.", students: "150+", classes: 6, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
   ];
 
   return (
@@ -89,15 +90,15 @@ const Experience = () => {
 
         <div className="mt-8 sm:mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           <div className="text-center p-4 sm:p-5 lg:p-6 bg-gray-50 rounded-xl border border-gray-200">
-            <div className="text-2xl sm:text-3xl font-bold text-black mb-1">310+</div>
+            <div className="text-2xl sm:text-3xl font-bold text-black mb-1">400+</div>
             <div className="text-xs sm:text-sm text-gray-600 uppercase tracking-wider">Total Students</div>
           </div>
           <div className="text-center p-4 sm:p-5 lg:p-6 bg-gray-50 rounded-xl border border-gray-200">
-            <div className="text-2xl sm:text-3xl font-bold text-black mb-1">24</div>
+            <div className="text-2xl sm:text-3xl font-bold text-black mb-1">30</div>
             <div className="text-xs sm:text-sm text-gray-600 uppercase tracking-wider">Classes Taught</div>
           </div>
           <div className="text-center p-4 sm:p-5 lg:p-6 bg-gray-50 rounded-xl border border-gray-200">
-            <div className="text-2xl sm:text-3xl font-bold text-black mb-1">4</div>
+            <div className="text-2xl sm:text-3xl font-bold text-black mb-1">5</div>
             <div className="text-xs sm:text-sm text-gray-600 uppercase tracking-wider">Institutions</div>
           </div>
         </div>
