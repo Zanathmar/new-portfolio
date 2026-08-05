@@ -54,15 +54,12 @@ const Hero = () => {
       const section = sectionRef.current;
       if (!section) return;
       const offset = -section.getBoundingClientRect().top;
-      const isMobile = window.innerWidth < 768;
-      const headingFactor = isMobile ? 0.04 : 0.08;
-      const imageFactor = isMobile ? -0.12 : -0.22;
 
       if (headingRef.current) {
-        headingRef.current.style.transform = `translateY(${offset * headingFactor}px)`;
+        headingRef.current.style.transform = `translateY(${offset * 0.08}px)`;
       }
       if (imageRef.current) {
-        imageRef.current.style.transform = `translate(-50%, -50%) translateY(${offset * imageFactor}px)`;
+        imageRef.current.style.transform = `translate(-50%, -50%) translateY(${offset * -0.22}px)`;
       }
     };
 
@@ -85,11 +82,11 @@ const Hero = () => {
     <section
       ref={sectionRef}
       id="home"
-      className="relative bg-[#f3f3f3] px-4 pt-8 pb-10 tablet:px-6 tablet:pt-12 tablet:pb-16 desktop:px-20 desktop:pt-16 desktop:pb-24 overflow-hidden"
+      className="relative bg-[#f3f3f3] px-4 pt-8 pb-8 tablet:px-6 tablet:pt-12 tablet:pb-16 desktop:px-20 desktop:pt-16 desktop:pb-24 overflow-hidden"
     >
-      <div className="font-jakarta text-xs tablet:text-sm desktop:text-base flex items-center justify-center gap-2 mb-4 tablet:mb-6 text-black">
+      <div className="font-jakarta text-[11px] tablet:text-sm desktop:text-base flex items-center justify-center gap-2 mb-4 tablet:mb-6 text-black">
         <span
-          className={`font-boldinline-block transition-all duration-300 ${
+          className={`font-bold inline-block transition-all duration-300 ${
             isAnimating ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'
           }`}
         >
@@ -98,41 +95,69 @@ const Hero = () => {
         <span>, I&apos;m Izzan.</span>
       </div>
 
-      <div className="relative">
-        <h1
-          ref={headingRef}
-          className="font-serif text-[15vw] tablet:text-8xl desktop:text-[13rem] font-bold leading-[0.95] tablet:leading-none text-center text-black select-none will-change-transform"
-        >
-          <span className="block">Software</span>
-          <span className="block mt-2 tablet:mt-4 desktop:mt-6">Developer</span>
+      {/* mobile layout: text above, image big in the middle, text below */}
+      <div className="min-[768px]:hidden flex flex-col items-center">
+        <h1 className="font-serif text-[15vw] font-bold leading-[0.95] text-center text-black select-none">
+          Software
         </h1>
 
-        <div
-          ref={imageRef}
-          className="absolute left-1/2 top-1/2 w-24 tablet:w-52 desktop:w-52 will-change-transform -translate-x-1/2 -translate-y-1/2"
-        >
-          <div className="border-2 border-primary-black rounded-xl tablet:rounded-2xl overflow-hidden shadow-[0px_4px_0px_0px_rgba(0,0,0,1)] tablet:shadow-[0px_7px_0px_0px_rgba(0,0,0,1)] bg-white">
+        <div className="relative w-[58vw] max-w-[280px] shrink-0 mx-auto my-5">
+          <div className="border-2 border-primary-black rounded-2xl overflow-hidden shadow-[0px_6px_0px_0px_rgba(0,0,0,1)] bg-white">
             <Image
               src="/assets/Profile.png"
               alt="Profile"
               width={400}
               height={480}
-              className="w-full aspect-[4/5] object-cover"
+              className="w-full h-auto aspect-[4/5] object-cover"
               priority
             />
           </div>
-          <div className="absolute -top-2 -right-3 tablet:-top-4 tablet:-right-10 bg-white border-2 border-primary-black rounded-full px-2.5 py-0.5 tablet:px-4 tablet:py-1.5 text-[10px] tablet:text-sm font-semibold text-black shadow-[0px_2px_0px_0px_rgba(0,0,0,1)] tablet:shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="absolute -top-2 -right-4 bg-white border-2 border-primary-black rounded-full px-2.5 py-1 text-[11px] font-semibold text-black shadow-[0px_2px_0px_0px_rgba(0,0,0,1)]">
+            hello
+          </div>
+        </div>
+
+        <h1 className="font-serif text-[15vw] font-bold leading-[0.95] text-center text-black select-none">
+          Developer
+        </h1>
+      </div>
+
+      {/* tablet/desktop: original overlapping parallax layout */}
+      <div className="hidden min-[768px]:block relative">
+        <h1
+          ref={headingRef}
+          className="font-serif tablet:text-8xl desktop:text-[13rem] font-bold leading-none text-center text-black select-none will-change-transform"
+        >
+          <span className="block">Software</span>
+          <span className="block mt-4 desktop:mt-6">Developer</span>
+        </h1>
+
+        <div
+          ref={imageRef}
+          className="absolute left-1/2 top-1/2 w-52 will-change-transform -translate-x-1/2 -translate-y-1/2"
+        >
+          <div className="border-2 border-primary-black rounded-2xl overflow-hidden shadow-[0px_7px_0px_0px_rgba(0,0,0,1)] bg-white">
+            <Image
+              src="/assets/Profile.png"
+              alt="Profile"
+              width={400}
+              height={480}
+              className="w-full h-auto aspect-[4/5] object-cover"
+              priority
+            />
+          </div>
+          <div className="absolute -top-4 -right-10 bg-white border-2 border-primary-black rounded-full px-4 py-1.5 text-sm font-semibold text-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
             hello
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col tablet:flex-row items-center justify-center gap-3 tablet:gap-6 mt-8 tablet:mt-10 font-jakarta text-xs tablet:text-sm text-primary-black">
+      <div className="flex flex-col tablet:flex-row items-center justify-center gap-2.5 tablet:gap-6 mt-6 tablet:mt-10 font-jakarta text-[11px] tablet:text-sm text-primary-black">
         <span className="flex items-center gap-1.5">
           <span aria-hidden="true">&#9670;</span> Based in Indonesia
         </span>
 
-        <div className="flex gap-2.5 tablet:gap-3">
+        <div className="flex gap-2 tablet:gap-3">
           {socials.map((social) => (
             <a
               key={social.href}
@@ -140,9 +165,9 @@ const Hero = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.label}
-              className="w-8 h-8 tablet:w-10 tablet:h-10 flex items-center justify-center rounded-full border-2 border-primary-black bg-primary-black text-white hover:bg-white hover:text-primary-black transition-colors duration-200"
+              className="w-7 h-7 tablet:w-10 tablet:h-10 flex items-center justify-center rounded-full border-2 border-primary-black bg-primary-black text-white hover:bg-white hover:text-primary-black transition-colors duration-200"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="tablet:w-4 tablet:h-4">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="tablet:w-4 tablet:h-4">
                 <path d={social.path} />
               </svg>
             </a>
