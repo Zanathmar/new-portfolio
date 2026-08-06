@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import TransitionLink from './transition/TransitionLink';
 
 const socials = [
   {
@@ -34,7 +35,7 @@ const Hero = () => {
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const imageRef = useRef<HTMLDivElement | null>(null);
+  const imageRef = useRef<HTMLAnchorElement | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -59,7 +60,7 @@ const Hero = () => {
         headingRef.current.style.transform = `translateY(${offset * 0.08}px)`;
       }
       if (imageRef.current) {
-        imageRef.current.style.transform = `translate(-50%, -50%) translateY(${offset * -0.22}px)`;
+        imageRef.current.style.transform = `translateY(${offset * -0.22}px)`;
       }
     };
 
@@ -101,7 +102,11 @@ const Hero = () => {
           Software
         </h1>
 
-        <div className="relative w-[58vw] max-w-[280px] shrink-0 mx-auto my-5">
+        <TransitionLink
+          href="/about"
+          aria-label="Go to About page"
+          className="relative w-[58vw] max-w-[280px] shrink-0 mx-auto my-5 block transition-transform active:scale-95"
+        >
           <div className="border-2 border-primary-black rounded-2xl overflow-hidden shadow-[0px_6px_0px_0px_rgba(0,0,0,1)] bg-white">
             <Image
               src="/assets/Profile.png"
@@ -115,7 +120,7 @@ const Hero = () => {
           <div className="absolute -top-2 -right-4 bg-white border-2 border-primary-black rounded-full px-2.5 py-1 text-[11px] font-semibold text-black shadow-[0px_2px_0px_0px_rgba(0,0,0,1)]">
             hello
           </div>
-        </div>
+        </TransitionLink>
 
         <h1 className="font-serif text-[15vw] font-bold leading-[0.95] text-center text-black select-none">
           Developer
@@ -132,23 +137,27 @@ const Hero = () => {
           <span className="block mt-4 desktop:mt-6">Developer</span>
         </h1>
 
-        <div
-          ref={imageRef}
-          className="absolute left-1/2 top-1/2 w-52 will-change-transform -translate-x-1/2 -translate-y-1/2"
-        >
-          <div className="border-2 border-primary-black rounded-2xl overflow-hidden shadow-[0px_7px_0px_0px_rgba(0,0,0,1)] bg-white">
-            <Image
-              src="/assets/Profile.png"
-              alt="Profile"
-              width={400}
-              height={480}
-              className="w-full h-auto aspect-[4/5] object-cover"
-              priority
-            />
-          </div>
-          <div className="absolute -top-4 -right-10 bg-white border-2 border-primary-black rounded-full px-4 py-1.5 text-sm font-semibold text-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
-            hello
-          </div>
+        <div className="absolute left-1/2 top-1/2 w-52 -translate-x-1/2 -translate-y-1/2">
+          <TransitionLink
+            href="/about"
+            aria-label="Go to About page"
+            ref={imageRef}
+            className="block will-change-transform transition-transform hover:scale-105"
+          >
+            <div className="border-2 border-primary-black rounded-2xl overflow-hidden shadow-[0px_7px_0px_0px_rgba(0,0,0,1)] bg-white">
+              <Image
+                src="/assets/Profile.png"
+                alt="Profile"
+                width={400}
+                height={480}
+                className="w-full h-auto aspect-[4/5] object-cover"
+                priority
+              />
+            </div>
+            <div className="absolute -top-4 -right-10 bg-white border-2 border-primary-black rounded-full px-4 py-1.5 text-sm font-semibold text-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
+              Click me
+            </div>
+          </TransitionLink>
         </div>
       </div>
 

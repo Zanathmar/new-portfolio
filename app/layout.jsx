@@ -1,5 +1,7 @@
 import './globals.css';
 import { Space_Mono } from 'next/font/google';
+import TransitionProvider from '../components/transition/TransitionProvider';
+
 
 const spaceMono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'] });
 
@@ -26,7 +28,11 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <TransitionProvider>
+          {children}
+        </TransitionProvider>
+        </body>
     </html>
   );
 }
