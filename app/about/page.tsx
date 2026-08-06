@@ -16,19 +16,17 @@ const countries = [
 ];
 
 const childhoodPhotos = [
-  { src: '/assets/images/minime3.jpg', alt: 'Izzan as a kid', caption: 'Me in Japan', rotate: '-rotate-3' },
+  { src: '/assets/images/minime1.jpg', alt: 'Izzan as a kid', caption: 'Marvel marathon era', rotate: '-rotate-3' },
   { src: '/assets/images/minime2.jpg', alt: 'Izzan on family trip', caption: 'First time in Europe', rotate: 'rotate-2' },
-  { src: '/assets/images/minime1.jpg', alt: 'Izzan young traveler', caption: 'Childhood Adventures', rotate: '-rotate-1' },
+  { src: '/assets/images/minime3.jpg', alt: 'Izzan young traveler', caption: 'Already hooked on the road', rotate: '-rotate-1' },
 ];
 
-
-
 const travelPhotos = [
-  { src: '/assets/images/travel1.jpg', alt: 'Izzan traveling', caption: 'Team 5 ' },
-  { src: '/assets/images/travel2.jpg', alt: 'Izzan backpacking', caption: 'Cruising in Sunset' },
-  { src: '/assets/images/travel3.jpg', alt: 'Izzan in Volendam', caption: 'Pyramid of Giza' },
+  { src: '/assets/images/travel1.jpg', alt: 'Izzan traveling', caption: 'Somewhere new' },
+  { src: '/assets/images/travel2.jpg', alt: 'Izzan backpacking', caption: 'On the move' },
+  { src: '/assets/images/travel3.jpg', alt: 'Izzan in Volendam', caption: 'Volendam, revisited' },
   { src: '/assets/images/travel4.jpg', alt: 'Izzan filming content', caption: 'Behind the scenes' },
-  { src: '/assets/images/travel5.jpg', alt: 'Izzan exploring', caption: 'Media Team' },
+  { src: '/assets/images/travel5.jpg', alt: 'Izzan exploring', caption: 'Another stamp in the passport' },
   { src: '/assets/images/travel6.jpg', alt: 'Izzan with friends abroad', caption: 'Different crew, same road' },
 ];
 
@@ -39,18 +37,18 @@ const offDuty = [
     src: '/assets/images/offday1.jpg',
   },
   {
-    title: 'Sport',
-    text: 'I like any sport, but I play basketball and football the most. I also like to watch UFC.',
+    title: 'Training',
+    text: 'Bodyweight workouts and slow, steady bulking. No cape required.',
     src: '/assets/images/offday2.jpg',
   },
   {
-    title: 'Hangouts',
-    text: "I'm Software Engineering guy but it doesn't mean I don't like to hang out with friends in real life. Ofcource i touch some grass dude.",
+    title: 'Storytelling',
+    text: 'Writing scripts, reels, and memoirs — turning trips into something worth reading.',
     src: '/assets/images/offday3.jpg',
   },
   {
     title: 'Movies',
-    text: 'Marvel, Star Wars, Disney etc — the same lineup since I was a kid.',
+    text: 'Iron Man, the Avengers, Star Wars — the same lineup since I was a kid.',
     src: '/assets/images/offday4.png',
   },
   {
@@ -118,14 +116,14 @@ export default function AboutPage() {
           Little me
         </p>
         <h2 className="font-serif text-3xl tablet:text-5xl desktop:text-6xl font-bold mb-5 tablet:mb-6">
-          Before the code, there was Iron Man who inspired a boy who curious
-          about the world.
+          Before the code, there was Iron Man, the Avengers, and a boy who wanted
+          to see the world.
         </h2>
         <p className="font-jakarta text-sm tablet:text-base leading-relaxed max-w-2xl mb-8 tablet:mb-10">
           Growing up I was glued to every Marvel movie I could get my hands on —
-          Iron Man and the Avengers especially. I was obsessed with the Jarvis that Tony Stark had, and I wanted to build one too when i was older.
+          Iron Man and the Avengers especially — with a healthy side of Star Wars.
           Somewhere in there I also caught the travel bug early, tagging along on
-          a family trip through Europe and Asia long before IDN Backpacker made it a habit.
+          a family trip through Europe long before IDN Backpacker made it a habit.
           Funny how it comes full circle.
         </p>
         <div className="grid grid-cols-3 gap-4 tablet:gap-6 max-w-2xl">
@@ -149,7 +147,32 @@ export default function AboutPage() {
         </div>
       </section>
 
-      
+      {/* what i do */}
+      <section className="px-4 py-12 tablet:px-6 tablet:py-16 desktop:px-20 desktop:py-24">
+        <p className="font-jakarta text-xs tablet:text-sm font-bold uppercase tracking-widest mb-3">
+          The day job
+        </p>
+        <h2 className="font-serif text-3xl tablet:text-5xl desktop:text-6xl font-bold mb-5 tablet:mb-6">
+          By day, I build things that (mostly) don&apos;t break.
+        </h2>
+        <p className="font-jakarta text-sm tablet:text-base leading-relaxed max-w-2xl mb-6 tablet:mb-8">
+          I work freelance and on projects as a frontend and full-stack developer.
+          Give me a Figma file and a deadline and I&apos;ll turn it into something
+          that actually ships. My toolbox leans heavily on the React ecosystem, with
+          a bit of Python and multi-agent AI systems on the side when a project
+          calls for it — great code comes with great responsibility, after all.
+        </p>
+        <div className="flex flex-wrap gap-2 tablet:gap-3">
+          {stack.map((tech) => (
+            <span
+              key={tech}
+              className="font-jakarta text-xs tablet:text-sm font-semibold border-2 border-primary-black rounded-full px-3 py-1.5 tablet:px-4 tablet:py-2 bg-white"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </section>
 
       {/* travels */}
       <section className="px-4 py-12 tablet:px-6 tablet:py-16 desktop:px-20 desktop:py-24 bg-black text-white overflow-hidden">
@@ -161,7 +184,7 @@ export default function AboutPage() {
           quite pack light enough.
         </h2>
         <p className="font-jakarta text-sm tablet:text-base leading-relaxed max-w-2xl mb-4 text-white/85">
-          Through the IDN Backpacker program, I'm glad that i was a Media Team member. I&apos;ve made scripts and Instagram
+          Through the IDN Backpacker program I&apos;ve made scripts and Instagram
           Reels documenting the trip, planned itineraries on the fly, and even
           written it all down in a memoir — <em>Backpacker: 20 Countries Journey</em>
           — because apparently a passport full of stamps wasn&apos;t proof enough.
