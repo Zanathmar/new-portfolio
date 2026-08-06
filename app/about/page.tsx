@@ -94,7 +94,7 @@ export default function AboutPage() {
             <div className="relative w-52 tablet:w-72 desktop:w-80">
               <div className="border-2 border-primary-black rounded-2xl overflow-hidden shadow-[0px_8px_0px_0px_rgba(0,0,0,1)] bg-white">
                 <Image
-                  src="/assets/images/aboutPhoto.jpg"
+                  src="/assets/images/me.jpg"
                   alt="Izzan"
                   width={500}
                   height={600}
