@@ -118,7 +118,7 @@ const Hero = () => {
             />
           </div>
           <div className="absolute -top-2 -right-4 bg-white border-2 border-primary-black rounded-full px-2.5 py-1 text-[11px] font-semibold text-black shadow-[0px_2px_0px_0px_rgba(0,0,0,1)]">
-            hello
+            click me
           </div>
         </TransitionLink>
 
