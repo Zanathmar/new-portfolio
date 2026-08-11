@@ -51,32 +51,23 @@ const Hero = () => {
   useEffect(() => {
     let frame = 0;
 
-    const update = () => {
+    const tick = () => {
       const section = sectionRef.current;
-      if (!section) return;
-      const offset = -section.getBoundingClientRect().top;
+      if (section) {
+        const offset = -section.getBoundingClientRect().top;
 
-      if (headingRef.current) {
-        headingRef.current.style.transform = `translateY(${offset * 0.08}px)`;
+        if (headingRef.current) {
+          headingRef.current.style.transform = `translateY(${offset * 0.08}px)`;
+        }
+        if (imageRef.current) {
+          imageRef.current.style.transform = `translateY(${offset * -0.22}px)`;
+        }
       }
-      if (imageRef.current) {
-        imageRef.current.style.transform = `translateY(${offset * -0.22}px)`;
-      }
+      frame = requestAnimationFrame(tick);
     };
 
-    const onScroll = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', update);
-      cancelAnimationFrame(frame);
-    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   return (
@@ -118,7 +109,7 @@ const Hero = () => {
             />
           </div>
           <div className="absolute -top-2 -right-4 bg-white border-2 border-primary-black rounded-full px-2.5 py-1 text-[11px] font-semibold text-black shadow-[0px_2px_0px_0px_rgba(0,0,0,1)]">
-            click me
+            Click me
           </div>
         </TransitionLink>
 
@@ -142,20 +133,22 @@ const Hero = () => {
             href="/about"
             aria-label="Go to About page"
             ref={imageRef}
-            className="block will-change-transform transition-transform hover:scale-105"
+            className="block will-change-transform"
           >
-            <div className="border-2 border-primary-black rounded-2xl overflow-hidden shadow-[0px_7px_0px_0px_rgba(0,0,0,1)] bg-white">
-              <Image
-                src="/assets/Profile.png"
-                alt="Profile"
-                width={400}
-                height={480}
-                className="w-full h-auto aspect-[4/5] object-cover"
-                priority
-              />
-            </div>
-            <div className="absolute -top-4 -right-10 bg-white border-2 border-primary-black rounded-full px-4 py-1.5 text-sm font-semibold text-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
-              Click me
+            <div className="relative transition-transform duration-300 hover:scale-105">
+              <div className="border-2 border-primary-black rounded-2xl overflow-hidden shadow-[0px_7px_0px_0px_rgba(0,0,0,1)] bg-white">
+                <Image
+                  src="/assets/Profile.png"
+                  alt="Profile"
+                  width={400}
+                  height={480}
+                  className="w-full h-auto aspect-[4/5] object-cover"
+                  priority
+                />
+              </div>
+              <div className="absolute -top-4 -right-10 bg-white border-2 border-primary-black rounded-full px-4 py-1.5 text-sm font-semibold text-black shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]">
+                Click me
+              </div>
             </div>
           </TransitionLink>
         </div>

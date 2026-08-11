@@ -27,9 +27,9 @@ const travelPhotos = [
   { src: '/assets/images/travel1.jpg', alt: 'Izzan traveling', caption: 'Team 5 ' },
   { src: '/assets/images/travel2.jpg', alt: 'Izzan backpacking', caption: 'Cruising in Sunset' },
   { src: '/assets/images/travel3.jpg', alt: 'Izzan in Volendam', caption: 'Pyramid of Giza' },
-  { src: '/assets/images/travel4.jpg', alt: 'Izzan filming content', caption: 'Behind the scenes' },
+  { src: '/assets/images/travel4.jpg', alt: 'Izzan filming content', caption: 'Budapest Parliament Building' },
   { src: '/assets/images/travel5.jpg', alt: 'Izzan exploring', caption: 'Media Team' },
-  { src: '/assets/images/travel6.jpg', alt: 'Izzan with friends abroad', caption: 'Different crew, same road' },
+  { src: '/assets/images/travel6.jpg', alt: 'Izzan with friends abroad', caption: 'Volendam' },
 ];
 
 const offDuty = [
