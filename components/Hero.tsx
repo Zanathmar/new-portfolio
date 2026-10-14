@@ -74,7 +74,7 @@ const Hero = () => {
     <section
       ref={sectionRef}
       id="home"
-      className="relative bg-[#f3f3f3] px-4 pt-8 pb-8 tablet:px-6 tablet:pt-12 tablet:pb-16 desktop:px-20 desktop:pt-16 desktop:pb-24 overflow-hidden"
+      className="relative bg-[#f3f3f3] px-4 pt-28 pb-8 tablet:px-6 tablet:pt-32 tablet:pb-16 desktop:px-20 desktop:pt-36 desktop:pb-24 overflow-hidden"
     >
       <div className="font-jakarta text-[11px] tablet:text-sm desktop:text-base flex items-center justify-center gap-2 mb-4 tablet:mb-6 text-black">
         <span
