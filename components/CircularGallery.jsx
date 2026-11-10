@@ -19,10 +19,7 @@ function debounce(func, wait) {
 
   return function (...args) {
     clearTimeout(timeout);
-
-    timeout = setTimeout(() => {
-      func.apply(this, args);
-    }, wait);
+    timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
 
@@ -39,7 +36,6 @@ async function loadGoogleFont(fontUrl) {
     }
 
     const css = await response.text();
-
     const fontFaces = css.match(/@font-face\s*{[^}]*}/g) || [];
 
     for (const block of fontFaces) {
@@ -73,7 +69,7 @@ class Media {
     text,
     viewport,
     bend,
-    textColor,
+    textColor
   }) {
     this.geometry = geometry;
     this.gl = gl;
@@ -128,7 +124,6 @@ class Media {
           gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
         }
       `,
-      // Simply output the texture. Canvas transparency handles the rounded corners & external text
       fragment: `
         precision highp float;
 
@@ -136,8 +131,7 @@ class Media {
         varying vec2 vUv;
 
         void main() {
-          vec4 color = texture2D(tMap, vUv);
-          gl_FragColor = color;
+          gl_FragColor = texture2D(tMap, vUv);
         }
       `,
 
@@ -169,8 +163,8 @@ class Media {
     const canvas = document.createElement('canvas');
 
     const canvasWidth = 800;
-    const canvasHeight = 1100; // Extended height to make room for the text at the bottom
-    const cardHeight = 850;    // The actual card container height
+    const canvasHeight = 1100;
+    const cardHeight = 850;
 
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
@@ -182,19 +176,16 @@ class Media {
       return;
     }
 
-    // Clear everything to ensure transparent background outside the card
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-    // 1. Draw the rounded card background
     ctx.save();
     this.roundRect(ctx, 0, 0, canvasWidth, cardHeight, 45);
     ctx.clip();
-    
+
     ctx.fillStyle = '#242424';
     ctx.fill();
 
-    // 2. Draw the image (smaller with padding inside the card)
-    const padding = 150; // Padding to ensure the image doesn't touch the card borders
+    const padding = 150;
     const boxWidth = canvasWidth - padding * 2;
     const boxHeight = cardHeight - padding * 2;
 
@@ -206,7 +197,6 @@ class Media {
     let drawWidth;
     let drawHeight;
 
-    // Preserve aspect ratio while fitting within padded bounds
     if (imageRatio > boxRatio) {
       drawWidth = boxWidth;
       drawHeight = drawWidth / imageRatio;
@@ -215,16 +205,12 @@ class Media {
       drawWidth = drawHeight * imageRatio;
     }
 
-    // Center the image within the padded box area
     const drawX = padding + (boxWidth - drawWidth) / 2;
     const drawY = padding + (boxHeight - drawHeight) / 2;
 
     ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-    
-    // Restore context so text drawing isn't constrained by card's rounded clipping mask
     ctx.restore();
 
-    // 3. Draw text outside of the card container
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     ctx.fillStyle = this.textColor || '#ffffff';
@@ -315,9 +301,8 @@ class Media {
       this.viewport = viewport;
     }
 
-    this.scale = this.screen.height / 1500;
+    this.scale = Math.min(this.screen.height / 1500, this.screen.width / 1800);
 
-    // Adjusted scaling ratio to match the new 800x1100 canvas size
     this.plane.scale.y = (this.viewport.height * (960 * this.scale)) / this.screen.height;
     this.plane.scale.x = (this.viewport.width * (700 * this.scale)) / this.screen.width;
 
@@ -327,6 +312,8 @@ class Media {
     this.x = this.width * this.index;
   }
 }
+
+const AXIS_LOCK_THRESHOLD = 6;
 
 class App {
   constructor(
@@ -343,6 +330,10 @@ class App {
       last: 0
     };
 
+    this.isDown = false;
+    this.axis = null;
+    this.raf = null;
+
     this.onCheckDebounce = debounce(this.onCheck.bind(this), 200);
 
     this.createRenderer();
@@ -354,7 +345,8 @@ class App {
     this.createGeometry();
     this.createMedias(items, bend, textColor);
 
-    this.update();
+    this.boundUpdate = this.update.bind(this);
+    this.start();
     this.addEventListeners();
   }
 
@@ -416,10 +408,18 @@ class App {
     });
   }
 
+  pxToWorld() {
+    return this.viewport.width / this.screen.width;
+  }
+
   onTouchDown(e) {
+    const point = e.touches ? e.touches[0] : e;
+
     this.isDown = true;
+    this.axis = e.touches ? null : 'x';
     this.scroll.position = this.scroll.current;
-    this.start = e.touches ? e.touches[0].clientX : e.clientX;
+    this.startX = point.clientX;
+    this.startY = point.clientY;
   }
 
   onTouchMove(e) {
@@ -427,19 +427,42 @@ class App {
       return;
     }
 
-    const x = e.touches ? e.touches[0].clientX : e.clientX;
-    const distance = (this.start - x) * (this.scrollSpeed * 0.025);
+    const point = e.touches ? e.touches[0] : e;
+    const dx = this.startX - point.clientX;
+    const dy = this.startY - point.clientY;
+
+    if (!this.axis) {
+      if (Math.abs(dx) < AXIS_LOCK_THRESHOLD && Math.abs(dy) < AXIS_LOCK_THRESHOLD) {
+        return;
+      }
+
+      this.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+
+      if (this.axis === 'y') {
+        this.isDown = false;
+        this.onCheck();
+        return;
+      }
+    }
+
+    const distance = dx * this.pxToWorld() * (this.scrollSpeed / 1.5);
 
     this.scroll.target = this.scroll.position + distance;
   }
 
   onTouchUp() {
+    if (!this.isDown) {
+      return;
+    }
+
     this.isDown = false;
     this.onCheck();
   }
 
   onWheel(e) {
-    const delta = e.deltaY || e.wheelDelta || e.detail;
+    const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+    const delta = horizontal ? e.deltaX : e.deltaY || e.wheelDelta || e.detail;
+
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
   }
@@ -510,6 +533,19 @@ class App {
     }
   }
 
+  start() {
+    if (!this.raf) {
+      this.raf = window.requestAnimationFrame(this.boundUpdate);
+    }
+  }
+
+  stop() {
+    if (this.raf) {
+      window.cancelAnimationFrame(this.raf);
+      this.raf = null;
+    }
+  }
+
   update() {
     this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
 
@@ -525,47 +561,67 @@ class App {
 
     this.scroll.last = this.scroll.current;
 
-    this.raf = window.requestAnimationFrame(this.update.bind(this));
+    this.raf = window.requestAnimationFrame(this.boundUpdate);
   }
 
   addEventListeners() {
-    this.boundOnResize = this.onResize.bind(this);
     this.boundOnWheel = this.onWheel.bind(this);
     this.boundOnTouchDown = this.onTouchDown.bind(this);
     this.boundOnTouchMove = this.onTouchMove.bind(this);
     this.boundOnTouchUp = this.onTouchUp.bind(this);
     this.boundOnKeyDown = this.onKeyDown.bind(this);
 
-    window.addEventListener('resize', this.boundOnResize);
-    window.addEventListener('wheel', this.boundOnWheel, { passive: true });
-    window.addEventListener('mousedown', this.boundOnTouchDown);
+    this.container.addEventListener('wheel', this.boundOnWheel, { passive: true });
+    this.container.addEventListener('mousedown', this.boundOnTouchDown);
+    this.container.addEventListener('touchstart', this.boundOnTouchDown, { passive: true });
+    this.container.addEventListener('touchmove', this.boundOnTouchMove, { passive: true });
+    this.container.addEventListener('touchend', this.boundOnTouchUp);
+    this.container.addEventListener('touchcancel', this.boundOnTouchUp);
+    this.container.addEventListener('keydown', this.boundOnKeyDown);
+
     window.addEventListener('mousemove', this.boundOnTouchMove);
     window.addEventListener('mouseup', this.boundOnTouchUp);
-    window.addEventListener('touchstart', this.boundOnTouchDown, { passive: true });
-    window.addEventListener('touchmove', this.boundOnTouchMove, { passive: true });
-    window.addEventListener('touchend', this.boundOnTouchUp);
 
-    this.container.addEventListener('keydown', this.boundOnKeyDown);
+    this.resizeObserver = new ResizeObserver(() => this.onResize());
+    this.resizeObserver.observe(this.container);
+
+    this.intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          this.start();
+        } else {
+          this.stop();
+        }
+      },
+      { threshold: 0 }
+    );
+    this.intersectionObserver.observe(this.container);
   }
 
   destroy() {
-    if (this.raf) {
-      window.cancelAnimationFrame(this.raf);
-    }
+    this.stop();
 
-    window.removeEventListener('resize', this.boundOnResize);
-    window.removeEventListener('wheel', this.boundOnWheel);
-    window.removeEventListener('mousedown', this.boundOnTouchDown);
-    window.removeEventListener('mousemove', this.boundOnTouchMove);
-    window.removeEventListener('mouseup', this.boundOnTouchUp);
-    window.removeEventListener('touchstart', this.boundOnTouchDown);
-    window.removeEventListener('touchmove', this.boundOnTouchMove);
-    window.removeEventListener('touchend', this.boundOnTouchUp);
-
+    this.container.removeEventListener('wheel', this.boundOnWheel);
+    this.container.removeEventListener('mousedown', this.boundOnTouchDown);
+    this.container.removeEventListener('touchstart', this.boundOnTouchDown);
+    this.container.removeEventListener('touchmove', this.boundOnTouchMove);
+    this.container.removeEventListener('touchend', this.boundOnTouchUp);
+    this.container.removeEventListener('touchcancel', this.boundOnTouchUp);
     this.container.removeEventListener('keydown', this.boundOnKeyDown);
 
-    if (this.renderer && this.renderer.gl && this.renderer.gl.canvas && this.renderer.gl.canvas.parentNode) {
-      this.renderer.gl.canvas.parentNode.removeChild(this.renderer.gl.canvas);
+    window.removeEventListener('mousemove', this.boundOnTouchMove);
+    window.removeEventListener('mouseup', this.boundOnTouchUp);
+
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
+
+    if (this.gl && this.gl.canvas && this.gl.canvas.parentNode) {
+      this.gl.canvas.parentNode.removeChild(this.gl.canvas);
     }
   }
 }
@@ -627,127 +683,3 @@ export default function CircularGallery({
     />
   );
 }
-
-const skills = [
-  {
-    image:
-      'https://cdn.jsdelivr.net/npm/devicon@2.17.0/icons/nextjs/nextjs-original.svg',
-    text: 'Next.js',
-  },
-  {
-    image:
-      'https://cdn.jsdelivr.net/npm/devicon@2.17.0/icons/react/react-original.svg',
-    text: 'React',
-  },
-  {
-    image:
-      'https://cdn.jsdelivr.net/npm/devicon@2.17.0/icons/tailwindcss/tailwindcss-original.svg',
-    text: 'Tailwind CSS',
-  },
-  {
-    image:
-      'https://cdn.jsdelivr.net/npm/devicon@2.17.0/icons/laravel/laravel-original.svg',
-    text: 'Laravel',
-  },
-  {
-    image:
-      'https://cdn.jsdelivr.net/npm/devicon@2.17.0/icons/flutter/flutter-original.svg',
-    text: 'Flutter',
-  },
-  {
-    image:
-      'https://cdn.jsdelivr.net/npm/devicon@2.17.0/icons/figma/figma-original.svg',
-    text: 'Figma',
-  }
-];
-
-export const Skills = () => {
-  return (
-    <section
-      className="
-        min-h-screen
-        bg-[#1a1a1a]
-        rounded-t-[40px]
-        sm:rounded-t-[64px]
-        flex
-        flex-col
-        items-center
-        justify-center
-        px-4
-        py-16
-        sm:px-6
-        lg:px-8
-      "
-    >
-      {/* HEADER */}
-
-      <div
-        className="
-          text-center
-          mb-10
-          sm:mb-16
-          max-w-2xl
-        "
-      >
-        <h2
-          className="
-            text-3xl
-            sm:text-4xl
-            lg:text-6xl
-            font-bold
-            text-white
-            mb-3
-            tracking-tight
-          "
-        >
-          Skills
-        </h2>
-
-        <div
-          className="
-            w-12
-            h-[3px]
-            bg-white
-            mx-auto
-            mb-4
-          "
-        />
-
-        <p
-          className="
-            text-gray-400
-            text-sm
-            sm:text-base
-            lg:text-lg
-            font-light
-            px-4
-          "
-        >
-          Focused expertise in modern tools & frameworks
-        </p>
-      </div>
-
-      {/* GALLERY */}
-
-      <div
-        className="
-          w-full
-          max-w-[1200px]
-        "
-        style={{
-          height: '650px',
-          position: 'relative'
-        }}
-      >
-        <CircularGallery
-          items={skills}
-          bend={2}
-          textColor="#f4f4f4"
-          fontUrl="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
-          scrollSpeed={1.5}
-          scrollEase={0.04}
-        />
-      </div>
-    </section>
-  );
-};

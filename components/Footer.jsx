@@ -25,7 +25,7 @@ const socialLinks = [
   { label: 'GitHub', href: 'https://github.com/' },
   { label: 'LinkedIn', href: 'https://linkedin.com/' },
   { label: 'Instagram', href: 'https://instagram.com/' },
-  { label: 'Threads', href: 'https://threads.com/' },
+  { label: 'Threads', href: 'https://threads.com/@zanathmar' },
 ];
 
 const linkClass =
@@ -48,7 +48,7 @@ const Footer = () => (
         </div>
 
         <div className="flex flex-col gap-4">
-          <h3 className="text-sm font-bold text-black">Company</h3>
+          <h3 className="text-sm font-bold text-black">Directory</h3>
           <ul className="flex flex-col gap-3 text-sm">
             {companyLinks.map((item) => (
               <li key={item.label}>
