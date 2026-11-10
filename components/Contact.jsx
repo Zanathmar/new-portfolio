@@ -51,8 +51,6 @@ const Contact = () => {
               className="w-full border-2 border-primary-black rounded-lg px-4 py-4 text-p2 focus:border-primary-black focus:outline-none transition-all" required />
             <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="Email"
               className="w-full border-2 border-primary-black rounded-lg px-4 py-4 text-p2 focus:border-primary-black focus:outline-none transition-all" required />
-            <input type="url" name="website" value={formData.website} onChange={handleInputChange} placeholder="Your website (if exists)"
-              className="w-full border-2 border-primary-black rounded-lg px-4 py-4 text-p2 focus:border-primary-black focus:outline-none transition-all" />
             <textarea name="message" value={formData.message} onChange={handleInputChange} placeholder="How can I help?" rows={6}
               className="w-full border-2 border-primary-black rounded-lg px-4 py-4 text-p2 focus:border-primary-black focus:outline-none transition-all resize-vertical" required />
 
