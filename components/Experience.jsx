@@ -15,7 +15,8 @@ const Experience = () => {
     { company: "Pondok Pesantren Qurrota A'yun", role: "IT Trainer", period: "March 2025", type: "Volunteer", description: "Instructed 6 classes including more than 80 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "80+", classes: 6, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
     { company: "SMAN 8 Jakarta", role: "IT Trainer", period: "May 2025", type: "Volunteer", description: "Instructed 7 classes including more than 100 students in fundamental web development using HTML, CSS, and JavaScript for 1 week.", students: "100+", classes: 7, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
     { company: "SMAN 17 Jakarta", role: "IT Trainer", period: "May 2026", type: "Volunteer", description: "Instructed 6 classes including more than 150 students in fundamental web development using HTML, CSS, and JavaScript for 1 week.", students: "150+", classes: 6, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
-    { company: "Kementerian Komunikasi dan Digital (Komdigi)", role: "Information System Intern", period: "August - October 2026", type: "Internship", description: "Developing internal information systems as part of the Sistem Informasi division.", status: "Ongoing", duration: "3 months", technologies: [] },
+    { company: "Kementerian Komunikasi dan Digital (Komdigi)", role: "Information System Intern", period: "August - October 2026", type: "Internship", description: "Developing internal information systems as part of the Sistem Informasi division.", duration: "3 months", technologies: [] },
+    { company: "Veda Praxis", role: "Junior Consultant", period: "November - February 2027", type: "Internship", description: "TBA", status: "Ongoing", duration: "3 months", technologies: [] },
   ];
 
   return (
