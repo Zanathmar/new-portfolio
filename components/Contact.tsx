@@ -215,7 +215,7 @@ const Contact = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`btn-send flex items-center w-52 bg-black text-white text-[18px] font-semibold px-5 py-3.5 rounded-xl overflow-hidden border-2 border-black shadow-[0px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[0px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[3px] transition-all duration-200 disabled:opacity-60 ${
+              className={`btn-send flex items-center w-48 bg-black text-white text-[18px] font-semibold px-5 py-3.5 rounded-xl overflow-hidden border-2 border-black shadow-[0px_5px_0px_0px_rgba(0,0,0,1)] hover:shadow-[0px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[3px] transition-all duration-200 disabled:opacity-60 ${
                 isSubmitting ? 'cursor-not-allowed' : 'cursor-pointer'
               }`}
             >

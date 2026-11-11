@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import FooterQuote from './FooterQuote';
 
 const Arrow = () => (
   <svg
@@ -91,10 +92,8 @@ const Footer = () => (
         </div>
 
         <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
-          <h3 className="text-sm font-bold text-black">Newsletter</h3>
-          <p className="text-sm leading-relaxed text-gray-600">
-            Receive project updates, new work, and early access to what I am building.
-          </p>
+          <h3 className="text-sm font-bold text-black">Words I build by</h3>
+          <FooterQuote />
         </div>
       </div>
       <div className="mt-10"></div>

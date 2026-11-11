@@ -86,6 +86,8 @@ const Skills = () => {
 
   return (
     <section
+      id="skills"
+      aria-label="Skills"
       className="
         min-h-0
         sm:min-h-screen
