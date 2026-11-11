@@ -146,28 +146,134 @@ interface CardProps {
   active: boolean;
   current: boolean;
   className: string;
+  isMobile?: boolean;
 }
 
-const Card = ({ entry, active, current, className }: CardProps) => (
-  <article
-    data-card
-    className={`relative flex shrink-0 bg-white border border-black rounded-2xl p-6 lg:p-8 transition-all duration-300 ease-out ${
-      active ? shadowActive : shadowIdle
-    } ${className}`}
-  >
-    <div className="flex gap-6 lg:gap-8">
-      {/* Left sidebar: year + image + badges */}
-      <div className="flex flex-col items-center justify-start gap-4 shrink-0 w-[160px] lg:w-[180px] border-r border-black pr-6 lg:pr-8">
-        <span
+const Card = ({ entry, active, current, className, isMobile = false }: CardProps) => {
+  // Desktop horizontal layout
+  if (!isMobile) {
+    return (
+      <article
+        data-card
+        className={`relative flex shrink-0 bg-white border border-black rounded-2xl p-6 lg:p-8 transition-all duration-300 ease-out ${
+          active ? shadowActive : shadowIdle
+        } ${className}`}
+      >
+        <div className="flex gap-6 lg:gap-8">
+          {/* Left sidebar: year + image + badges */}
+          <div className="flex flex-col items-center justify-start gap-4 shrink-0 w-[160px] lg:w-[180px] border-r border-black pr-6 lg:pr-8">
+            <span
+              aria-hidden="true"
+              className="font-black text-heading-1 lg:text-display leading-none tracking-tight text-black writing-vertical-lr text-center w-full"
+              style={{ lineHeight: 1 }}
+            >
+              {yearLabel(entry.start, entry.end)}
+            </span>
+            
+            {entry.image && (
+              <div className="relative w-full aspect-square">
+                <img
+                  src={entry.image}
+                  alt={`${entry.org} logo`}
+                  className={`w-full h-full object-cover rounded-xl border border-black grayscale transition-all duration-300 ${
+                    active ? 'grayscale-0' : ''
+                  }`}
+                  loading="lazy"
+                />
+              </div>
+            )}
+
+            <div className="flex flex-col gap-2 mt-auto w-full">
+              <Badge>{entry.type}</Badge>
+              {current && (
+                <Badge className="bg-black text-white w-full justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-400 motion-safe:animate-pulse" aria-hidden="true" />
+                  Current
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          {/* Right content */}
+          <div className="flex flex-col flex-1 min-w-0">
+            <h3 className="font-black text-heading-2 lg:text-heading-1 leading-tight tracking-tight mb-3">{entry.title}</h3>
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <Meta icon={<Building2 size={16} />}>{entry.org}</Meta>
+              <Meta icon={<Calendar size={16} />}>{entry.period}</Meta>
+              <Meta icon={<Clock size={16} />}>{entry.duration}</Meta>
+            </div>
+
+            {entry.students && (
+              <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="border border-black rounded-xl py-3 text-center">
+                  <div className="font-black text-heading-3 leading-none">{entry.students}</div>
+                  <div className="mt-0.5 text-p2 text-zinc-500">Students</div>
+                </div>
+                <div className="border border-black rounded-xl py-3 text-center">
+                  <div className="font-black text-heading-3 leading-none">{entry.classes}</div>
+                  <div className="mt-0.5 text-p2 text-zinc-500">Classes</div>
+                </div>
+              </div>
+            )}
+
+            <p className="text-zinc-500 text-p2 leading-relaxed flex-1">{entry.description}</p>
+
+            {entry.technologies.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-4">
+                {entry.technologies.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1 bg-zinc-100 text-zinc-700 text-p2 font-medium rounded-full hover:bg-black hover:text-white transition-all duration-200"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </article>
+    );
+  }
+
+  // Mobile vertical layout
+  return (
+    <article
+      data-card
+      className={`relative flex flex-col bg-white border border-black rounded-2xl p-6 transition-all duration-300 ease-out ${
+        active ? shadowActive : shadowIdle
+      } ${className}`}
+    >
+      {/* Header: Year + badges in same row with hierarchy */}
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <div
           aria-hidden="true"
-          className="font-black text-heading-1 lg:text-display leading-none tracking-tight text-black writing-vertical-lr text-center w-full"
-          style={{ lineHeight: 1 }}
+          className="font-black text-heading-1 leading-none tracking-tight text-black shrink-0"
         >
           {yearLabel(entry.start, entry.end)}
-        </span>
-        
-        {entry.image && (
-          <div className="relative w-full aspect-square">
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge>{entry.type}</Badge>
+          {current && isMobile && (
+            <span 
+              className="w-3 h-3 rounded-full bg-green-400 motion-safe:animate-pulse"
+              aria-label="Current position"
+              title="Current position"
+            />
+          )}
+          {current && !isMobile && (
+            <Badge className="bg-black text-white">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 motion-safe:animate-pulse" aria-hidden="true" />
+              Current
+            </Badge>
+          )}
+        </div>
+      </div>
+
+      {/* Organization image centered */}
+      {entry.image && (
+        <div className="flex justify-center mb-4">
+          <div className="relative w-24 h-24 aspect-square">
             <img
               src={entry.image}
               alt={`${entry.org} logo`}
@@ -177,59 +283,52 @@ const Card = ({ entry, active, current, className }: CardProps) => (
               loading="lazy"
             />
           </div>
-        )}
-
-        <div className="flex flex-col gap-2 mt-auto w-full">
-          <Badge>{entry.type}</Badge>
-          {current && (
-            <Badge className="bg-black text-white w-full justify-center">
-              
-              Current
-            </Badge>
-          )}
         </div>
+      )}
+
+      {/* Title */}
+      <h3 className="font-black text-heading-2 leading-tight tracking-tight mb-3">{entry.title}</h3>
+      
+      {/* Meta */}
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <Meta icon={<Building2 size={16} />}>{entry.org}</Meta>
+        <Meta icon={<Calendar size={16} />}>{entry.period}</Meta>
+        <Meta icon={<Clock size={16} />}>{entry.duration}</Meta>
       </div>
 
-      {/* Right content */}
-      <div className="flex flex-col flex-1 min-w-0">
-        <h3 className="font-black text-heading-2 lg:text-heading-1 leading-tight tracking-tight mb-3">{entry.title}</h3>
-        <div className="flex flex-wrap items-center gap-3 mb-4">
-          <Meta icon={<Building2 size={16} />}>{entry.org}</Meta>
-          <Meta icon={<Calendar size={16} />}>{entry.period}</Meta>
-          <Meta icon={<Clock size={16} />}>{entry.duration}</Meta>
+      {/* Stats */}
+      {entry.students && (
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="border border-black rounded-xl py-3 text-center">
+            <div className="font-black text-heading-3 leading-none">{entry.students}</div>
+            <div className="mt-0.5 text-p2 text-zinc-500">Students</div>
+          </div>
+          <div className="border border-black rounded-xl py-3 text-center">
+            <div className="font-black text-heading-3 leading-none">{entry.classes}</div>
+            <div className="mt-0.5 text-p2 text-zinc-500">Classes</div>
+          </div>
         </div>
+      )}
 
-        {entry.students && (
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="border border-black rounded-xl py-3 text-center">
-              <div className="font-black text-heading-3 leading-none">{entry.students}</div>
-              <div className="mt-0.5 text-p2 text-zinc-500">Students</div>
-            </div>
-            <div className="border border-black rounded-xl py-3 text-center">
-              <div className="font-black text-heading-3 leading-none">{entry.classes}</div>
-              <div className="mt-0.5 text-p2 text-zinc-500">Classes</div>
-            </div>
-          </div>
-        )}
+      {/* Description */}
+      <p className="text-zinc-500 text-p2 leading-relaxed flex-1">{entry.description}</p>
 
-        <p className="text-zinc-500 text-p2 leading-relaxed flex-1">{entry.description}</p>
-
-        {entry.technologies.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-4">
-            {entry.technologies.map((tech) => (
-              <span
-                key={tech}
-                className="px-3 py-1 bg-zinc-100 text-zinc-700 text-p2 font-medium rounded-full hover:bg-black hover:text-white transition-all duration-200"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  </article>
-);
+      {/* Technologies */}
+      {entry.technologies.length > 0 && (
+        <div className="flex flex-wrap gap-2 mt-4">
+          {entry.technologies.map((tech) => (
+            <span
+              key={tech}
+              className="px-3 py-1 bg-zinc-100 text-zinc-700 text-p2 font-medium rounded-full hover:bg-black hover:text-white transition-all duration-200"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      )}
+    </article>
+  );
+};
 
 const Experience = () => {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -384,7 +483,7 @@ const Experience = () => {
           {entries.map((entry) => (
             <li key={`${entry.org}-${entry.start}`} className="relative">
               <span className="absolute -left-[22px] top-6 w-3 h-3 rounded-full bg-white border border-black" />
-              <Card entry={entry} active={false} current={isCurrent(entry)} className="w-full" />
+              <Card entry={entry} active={false} current={isCurrent(entry)} className="w-full" isMobile />
             </li>
           ))}
         </ol>
