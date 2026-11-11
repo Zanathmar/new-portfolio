@@ -3,7 +3,13 @@
 import { useEffect, useState } from 'react';
 import CircularGallery from './CircularGallery';
 
-const skills = [
+export interface SkillItem {
+  image: string;
+  text: string;
+  description: string;
+}
+
+const skills: SkillItem[] = [
   {
     image: 'https://cdn.jsdelivr.net/npm/devicon@2.17.0/icons/nextjs/nextjs-original.svg',
     text: 'Next.js',
@@ -42,13 +48,21 @@ const skills = [
   }
 ];
 
-const GALLERY_CONFIG = {
+type Breakpoint = 'sm' | 'md' | 'lg';
+
+interface GalleryConfigItem {
+  bend: number;
+  scrollSpeed: number;
+  scrollEase: number;
+}
+
+const GALLERY_CONFIG: Record<Breakpoint, GalleryConfigItem> = {
   sm: { bend: 1, scrollSpeed: 1.7, scrollEase: 0.08 },
   md: { bend: 1.5, scrollSpeed: 1.6, scrollEase: 0.06 },
   lg: { bend: 2, scrollSpeed: 1.8, scrollEase: 0.05 }
 };
 
-const getBreakpoint = () => {
+const getBreakpoint = (): Breakpoint => {
   const w = window.innerWidth;
   if (w < 640) return 'sm';
   if (w < 1024) return 'md';
@@ -56,7 +70,7 @@ const getBreakpoint = () => {
 };
 
 const Skills = () => {
-  const [breakpoint, setBreakpoint] = useState(null);
+  const [breakpoint, setBreakpoint] = useState<Breakpoint | null>(null);
 
   useEffect(() => {
     const update = () => {

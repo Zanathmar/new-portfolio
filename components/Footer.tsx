@@ -13,7 +13,12 @@ const Arrow = () => (
   </svg>
 );
 
-const companyLinks = [
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+const companyLinks: NavLink[] = [
   { label: 'Home', href: '#home' },
   { label: 'Skills', href: '#skills' },
   { label: 'Projects', href: '#projects' },
@@ -21,7 +26,7 @@ const companyLinks = [
   { label: 'Contact', href: '#contact' },
 ];
 
-const socialLinks = [
+const socialLinks: NavLink[] = [
   { label: 'GitHub', href: 'https://github.com/' },
   { label: 'LinkedIn', href: 'https://linkedin.com/' },
   { label: 'Instagram', href: 'https://instagram.com/' },

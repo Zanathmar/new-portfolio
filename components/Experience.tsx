@@ -3,21 +3,34 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, Calendar, MapPin, ChevronRight } from 'lucide-react';
 
+export interface ExperienceItem {
+  company: string;
+  role: string;
+  period: string;
+  type: string;
+  description: string;
+  students?: string;
+  classes?: number;
+  duration: string;
+  technologies: string[];
+  status?: string;
+}
+
+const experiences: ExperienceItem[] = [
+  { company: "SMP Islam El-Rasyad Jakarta", role: "IT Trainer", period: "November 2024", type: "Volunteer", description: "Instructed 1 class including more than 20 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "20+", classes: 1, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
+  { company: "SMAN 78 Jakarta", role: "IT Trainer", period: "February 2025", type: "Volunteer", description: "Instructed 10 classes including more than 110 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "110+", classes: 10, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
+  { company: "Pondok Pesantren Qurrota A'yun", role: "IT Trainer", period: "March 2025", type: "Volunteer", description: "Instructed 6 classes including more than 80 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "80+", classes: 6, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
+  { company: "SMAN 8 Jakarta", role: "IT Trainer", period: "May 2025", type: "Volunteer", description: "Instructed 7 classes including more than 100 students in fundamental web development using HTML, CSS, and JavaScript for 1 week.", students: "100+", classes: 7, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
+  { company: "SMAN 17 Jakarta", role: "IT Trainer", period: "May 2026", type: "Volunteer", description: "Instructed 6 classes including more than 150 students in fundamental web development using HTML, CSS, and JavaScript for 1 week.", students: "150+", classes: 6, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
+  { company: "Kementerian Komunikasi dan Digital (Komdigi)", role: "Information System Intern", period: "August - October 2026", type: "Internship", description: "Developing internal information systems as part of the Sistem Informasi division.", duration: "3 months", technologies: [] },
+  { company: "Veda Praxis", role: "Junior Consultant", period: "November - February 2027", type: "Internship", description: "TBA", status: "Ongoing", duration: "3 months", technologies: [] },
+];
+
 const Experience = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   useEffect(() => { setIsVisible(true); }, []);
-
-  const experiences = [
-    { company: "SMP Islam El-Rasyad Jakarta", role: "IT Trainer", period: "November 2024", type: "Volunteer", description: "Instructed 1 class including more than 20 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "20+", classes: 1, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
-    { company: "SMAN 78 Jakarta", role: "IT Trainer", period: "February 2025", type: "Volunteer", description: "Instructed 10 classes including more than 110 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "110+", classes: 10, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
-    { company: "Pondok Pesantren Qurrota A'yun", role: "IT Trainer", period: "March 2025", type: "Volunteer", description: "Instructed 6 classes including more than 80 students in fundamental web development using HTML, CSS, and JavaScript for 1 week", students: "80+", classes: 6, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
-    { company: "SMAN 8 Jakarta", role: "IT Trainer", period: "May 2025", type: "Volunteer", description: "Instructed 7 classes including more than 100 students in fundamental web development using HTML, CSS, and JavaScript for 1 week.", students: "100+", classes: 7, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
-    { company: "SMAN 17 Jakarta", role: "IT Trainer", period: "May 2026", type: "Volunteer", description: "Instructed 6 classes including more than 150 students in fundamental web development using HTML, CSS, and JavaScript for 1 week.", students: "150+", classes: 6, duration: "1 week", technologies: ["HTML", "CSS", "JavaScript"] },
-    { company: "Kementerian Komunikasi dan Digital (Komdigi)", role: "Information System Intern", period: "August - October 2026", type: "Internship", description: "Developing internal information systems as part of the Sistem Informasi division.", duration: "3 months", technologies: [] },
-    { company: "Veda Praxis", role: "Junior Consultant", period: "November - February 2027", type: "Internship", description: "TBA", status: "Ongoing", duration: "3 months", technologies: [] },
-  ];
 
   return (
     <section id="experiences" className="min-h-screen bg-[#f5f5f5] flex flex-col items-center justify-center px-4 py-12 sm:py-16 lg:px-8">
@@ -102,8 +115,6 @@ const Experience = () => {
             })}
           </div>
         </div>
-
-       
       </div>
     </section>
   );

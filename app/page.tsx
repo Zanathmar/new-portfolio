@@ -11,7 +11,7 @@ import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 
 export default function Home() {
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   return (
     <>

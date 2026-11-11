@@ -4,15 +4,27 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Github } from 'lucide-react';
 
-const projects = [
+export interface ProjectItem {
+  title: string;
+  description: string;
+  image: string;
+  github: string;
+  tech: string[];
+}
+
+const projects: ProjectItem[] = [
   { title: "Escape Website", description: "Built a full-stack Islamic podcast and event platform (Next.js, Supabase, Tailwind CSS, TypeScript)", image: "/assets/images/project5.png", github: "https://github.com/akmallfhn/escape", tech: ["Next.js", "Tailwind CSS", "Supabase"] },
-  
   { title: "Expense Tracker App", description: "A modern expense tracker application with user authentication, category management, and real-time analytics.", image: "/assets/images/project2.png", github: "https://github.com/Zanathmar/CuanKu", tech: ["Laravel", "Inertia", "Tailwind CSS", "MySql"] },
   { title: "E-Library App", description: "A modern e-library application with user authentication, book search, and real-time book management.", image: "/assets/images/project3.png", github: "https://github.com/Zanathmar/e-library-skl", tech: ["Laravel", "Tailwind CSS", "MySql"] },
   { title: "Payroll App", description: "A modern payroll application with user authentication, employee management, and real-time analytics.", image: "/assets/images/project4.png", github: "https://github.com/Zanathmar/Payroll-app", tech: ["Laravel", "Tailwind CSS", "MySql"] },
 ];
 
-const ProjectCard = ({ project, index }) => (
+interface ProjectCardProps {
+  project: ProjectItem;
+  index: number;
+}
+
+const ProjectCard = ({ project, index }: ProjectCardProps) => (
   <div className="flex flex-col rounded-3xl border-2 border-primary-black shadow-[0px_5px_0px_0px_rgba(0,0,0,1)] bg-white" style={{ aspectRatio: '4/5' }}>
     <div className="w-full flex-shrink-0 p-3 pb-0">
       <div className="relative w-full overflow-hidden rounded-2xl" style={{ aspectRatio: '16/9' }}>
@@ -21,7 +33,7 @@ const ProjectCard = ({ project, index }) => (
           alt={project.title}
           fill
           className="object-cover"
-          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+          onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
         />
         <div className="absolute top-3 left-3 bg-white/15 backdrop-blur-md border border-white/25 rounded-full px-3 py-1">
           <span className="text-white font-mono text-xs font-semibold tracking-widest uppercase">
@@ -48,9 +60,9 @@ const ProjectCard = ({ project, index }) => (
 );
 
 const Projects = () => {
-  const [startIndex, setStartIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
-  const [direction, setDirection] = useState(null);
+  const [startIndex, setStartIndex] = useState<number>(0);
+  const [visible, setVisible] = useState<boolean>(true);
+  const [direction, setDirection] = useState<'left' | 'right' | null>(null);
   const n = projects.length;
 
   const desktopCards = [0, 1, 2].map((offset) => {
@@ -58,7 +70,7 @@ const Projects = () => {
     return { project: projects[idx], originalIndex: idx };
   });
 
-  const navigate = (newIndex, dir) => {
+  const navigate = (newIndex: number, dir: 'left' | 'right') => {
     setDirection(dir);
     setVisible(false);
     setTimeout(() => {
@@ -69,9 +81,9 @@ const Projects = () => {
 
   const prev = () => navigate(startIndex - 1, 'right');
   const next = () => navigate(startIndex + 1, 'left');
-  const goTo = (i) => navigate(i, i > startIndex ? 'left' : 'right');
+  const goTo = (i: number) => navigate(i, i > startIndex ? 'left' : 'right');
 
-  const slideStyle = {
+  const slideStyle: React.CSSProperties = {
     transition: 'opacity 0.3s ease, transform 0.3s ease',
     opacity: visible ? 1 : 0,
     transform: visible ? 'translateX(0)' : direction === 'left' ? 'translateX(-24px)' : 'translateX(24px)',

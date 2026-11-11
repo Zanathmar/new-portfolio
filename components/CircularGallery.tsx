@@ -14,20 +14,34 @@ import { useEffect, useRef } from 'react';
 
 import './CircularGallery.css';
 
-function debounce(func, wait) {
-  let timeout;
+export interface GalleryItem {
+  image: string;
+  text?: string;
+  description?: string;
+}
 
-  return function (...args) {
-    clearTimeout(timeout);
+interface ScrollState {
+  ease: number;
+  current: number;
+  target: number;
+  last: number;
+  position?: number;
+}
+
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  return function (this: any, ...args: Parameters<T>) {
+    if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => func.apply(this, args), wait);
   };
 }
 
-function lerp(a, b, t) {
+function lerp(a: number, b: number, t: number): number {
   return a + (b - a) * t;
 }
 
-async function loadGoogleFont(fontUrl) {
+async function loadGoogleFont(fontUrl: string): Promise<void> {
   try {
     const response = await fetch(fontUrl);
 
@@ -57,7 +71,45 @@ async function loadGoogleFont(fontUrl) {
   }
 }
 
+interface MediaParams {
+  geometry: Plane;
+  gl: Renderer['gl'];
+  image: string;
+  index: number;
+  length: number;
+  scene: Transform;
+  screen: { width: number; height: number };
+  text?: string;
+  viewport: { width: number; height: number };
+  bend: number;
+  textColor?: string;
+}
+
 class Media {
+  geometry: Plane;
+  gl: Renderer['gl'];
+  image: string;
+  index: number;
+  length: number;
+  scene: Transform;
+  screen: { width: number; height: number };
+  text: string;
+  viewport: { width: number; height: number };
+  bend: number;
+  textColor?: string;
+  extra: number;
+  texture!: Texture;
+  program!: Program;
+  plane!: Mesh;
+  scale!: number;
+  padding!: number;
+  width!: number;
+  widthTotal!: number;
+  x!: number;
+  speed!: number;
+  isBefore!: boolean;
+  isAfter!: boolean;
+
   constructor({
     geometry,
     gl,
@@ -70,7 +122,7 @@ class Media {
     viewport,
     bend,
     textColor
-  }) {
+  }: MediaParams) {
     this.geometry = geometry;
     this.gl = gl;
     this.image = image;
@@ -159,7 +211,7 @@ class Media {
     img.src = this.image;
   }
 
-  createCardTexture(img, texture) {
+  createCardTexture(img: HTMLImageElement, texture: Texture) {
     const canvas = document.createElement('canvas');
 
     const canvasWidth = 800;
@@ -194,8 +246,8 @@ class Media {
     const imageRatio = naturalWidth / naturalHeight;
     const boxRatio = boxWidth / boxHeight;
 
-    let drawWidth;
-    let drawHeight;
+    let drawWidth: number;
+    let drawHeight: number;
 
     if (imageRatio > boxRatio) {
       drawWidth = boxWidth;
@@ -221,7 +273,7 @@ class Media {
     texture.needsUpdate = true;
   }
 
-  roundRect(ctx, x, y, width, height, radius) {
+  roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) {
     ctx.beginPath();
     ctx.moveTo(x + radius, y);
     ctx.lineTo(x + width - radius, y);
@@ -244,7 +296,7 @@ class Media {
     this.plane.setParent(this.scene);
   }
 
-  update(scroll, direction) {
+  update(scroll: ScrollState, direction: 'left' | 'right') {
     this.plane.position.x = this.x - scroll.current - this.extra;
 
     const x = this.plane.position.x;
@@ -270,8 +322,8 @@ class Media {
     }
 
     this.speed = scroll.current - scroll.last;
-    this.program.uniforms.uTime.value += 0.04;
-    this.program.uniforms.uSpeed.value = this.speed;
+    (this.program.uniforms.uTime as { value: number }).value += 0.04;
+    (this.program.uniforms.uSpeed as { value: number }).value = this.speed;
 
     const planeOffset = this.plane.scale.x / 2;
     const viewportOffset = this.viewport.width / 2;
@@ -292,7 +344,7 @@ class Media {
     }
   }
 
-  onResize({ screen, viewport } = {}) {
+  onResize({ screen, viewport }: { screen?: { width: number; height: number }; viewport?: { width: number; height: number } } = {}) {
     if (screen) {
       this.screen = screen;
     }
@@ -315,10 +367,45 @@ class Media {
 
 const AXIS_LOCK_THRESHOLD = 6;
 
+export interface AppOptions {
+  items?: GalleryItem[];
+  bend?: number;
+  textColor?: string;
+  scrollSpeed?: number;
+  scrollEase?: number;
+}
+
 class App {
+  container: HTMLDivElement;
+  scrollSpeed: number;
+  scroll: ScrollState;
+  isDown: boolean;
+  axis: 'x' | 'y' | null;
+  raf: number | null;
+  onCheckDebounce: () => void;
+  renderer!: Renderer;
+  gl!: Renderer['gl'];
+  camera!: Camera;
+  scene!: Transform;
+  planeGeometry!: Plane;
+  mediasImages!: GalleryItem[];
+  medias!: Media[];
+  screen!: { width: number; height: number };
+  viewport!: { width: number; height: number };
+  startX!: number;
+  startY!: number;
+  boundUpdate: () => void;
+  boundOnWheel!: (e: WheelEvent) => void;
+  boundOnTouchDown!: (e: MouseEvent | TouchEvent) => void;
+  boundOnTouchMove!: (e: MouseEvent | TouchEvent) => void;
+  boundOnTouchUp!: () => void;
+  boundOnKeyDown!: (e: KeyboardEvent) => void;
+  resizeObserver?: ResizeObserver;
+  intersectionObserver?: IntersectionObserver;
+
   constructor(
-    container,
-    { items, bend = 2, textColor = '#ffffff', scrollSpeed = 1.5, scrollEase = 0.04 } = {}
+    container: HTMLDivElement,
+    { items, bend = 2, textColor = '#ffffff', scrollSpeed = 1.5, scrollEase = 0.04 }: AppOptions = {}
   ) {
     this.container = container;
     this.scrollSpeed = scrollSpeed;
@@ -380,8 +467,8 @@ class App {
     });
   }
 
-  createMedias(items, bend, textColor) {
-    const defaultItems = [
+  createMedias(items?: GalleryItem[], bend = 2, textColor = '#ffffff') {
+    const defaultItems: GalleryItem[] = [
       { image: 'https://picsum.photos/seed/1/800/600', text: 'Bridge' },
       { image: 'https://picsum.photos/seed/2/800/600', text: 'Desk Setup' },
       { image: 'https://picsum.photos/seed/3/800/600', text: 'Waterfall' }
@@ -412,22 +499,22 @@ class App {
     return this.viewport.width / this.screen.width;
   }
 
-  onTouchDown(e) {
-    const point = e.touches ? e.touches[0] : e;
+  onTouchDown(e: MouseEvent | TouchEvent) {
+    const point = 'touches' in e && e.touches ? e.touches[0] : (e as MouseEvent);
 
     this.isDown = true;
-    this.axis = e.touches ? null : 'x';
+    this.axis = 'touches' in e ? null : 'x';
     this.scroll.position = this.scroll.current;
     this.startX = point.clientX;
     this.startY = point.clientY;
   }
 
-  onTouchMove(e) {
+  onTouchMove(e: MouseEvent | TouchEvent) {
     if (!this.isDown) {
       return;
     }
 
-    const point = e.touches ? e.touches[0] : e;
+    const point = 'touches' in e && e.touches ? e.touches[0] : (e as MouseEvent);
     const dx = this.startX - point.clientX;
     const dy = this.startY - point.clientY;
 
@@ -447,7 +534,7 @@ class App {
 
     const distance = dx * this.pxToWorld() * (this.scrollSpeed / 1.5);
 
-    this.scroll.target = this.scroll.position + distance;
+    this.scroll.target = (this.scroll.position ?? this.scroll.current) + distance;
   }
 
   onTouchUp() {
@@ -459,15 +546,15 @@ class App {
     this.onCheck();
   }
 
-  onWheel(e) {
+  onWheel(e: WheelEvent) {
     const horizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY);
-    const delta = horizontal ? e.deltaX : e.deltaY || e.wheelDelta || e.detail;
+    const delta = horizontal ? e.deltaX : e.deltaY || (e as any).wheelDelta || (e as any).detail;
 
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
   }
 
-  onKeyDown(e) {
+  onKeyDown(e: KeyboardEvent) {
     switch (e.key) {
       case 'ArrowRight':
         e.preventDefault();
@@ -626,6 +713,15 @@ class App {
   }
 }
 
+export interface CircularGalleryProps {
+  items?: GalleryItem[];
+  bend?: number;
+  textColor?: string;
+  fontUrl?: string;
+  scrollSpeed?: number;
+  scrollEase?: number;
+}
+
 export default function CircularGallery({
   items,
   bend = 2,
@@ -633,15 +729,15 @@ export default function CircularGallery({
   fontUrl,
   scrollSpeed = 1.5,
   scrollEase = 0.04
-}) {
-  const containerRef = useRef(null);
+}: CircularGalleryProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) {
       return;
     }
 
-    let app;
+    let app: App | undefined;
     let mounted = true;
 
     const initialize = async () => {

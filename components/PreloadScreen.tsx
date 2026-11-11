@@ -6,9 +6,13 @@ import Shuffle from './Shuffle';
 const EXIT_DURATION = 700; // must match the CSS transition duration below
 const HOLD_AFTER_SHUFFLE = 700;
 
-const Preloader = ({ onComplete }) => {
-  const [isExiting, setIsExiting] = useState(false);
-  const hasFinishedRef = useRef(false);
+interface PreloadScreenProps {
+  onComplete?: () => void;
+}
+
+const Preloader = ({ onComplete }: PreloadScreenProps) => {
+  const [isExiting, setIsExiting] = useState<boolean>(false);
+  const hasFinishedRef = useRef<boolean>(false);
 
   const handleShuffleComplete = useCallback(() => {
     if (hasFinishedRef.current) return;

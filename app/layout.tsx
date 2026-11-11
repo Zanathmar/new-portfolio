@@ -1,11 +1,8 @@
 import './globals.css';
-import { Space_Mono } from 'next/font/google';
+import type { Metadata } from 'next';
 import TransitionProvider from '../components/transition/TransitionProvider';
 
-
-const spaceMono = Space_Mono({ subsets: ['latin'], weight: ['400', '700'] });
-
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Zanathmar | Portfolio',
   description: 'Software Developer based in Indonesia',
   icons: {
@@ -13,7 +10,11 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" className="scroll-smooth">
       <head>
@@ -32,7 +33,7 @@ export default function RootLayout({ children }) {
         <TransitionProvider>
           {children}
         </TransitionProvider>
-        </body>
+      </body>
     </html>
   );
 }
