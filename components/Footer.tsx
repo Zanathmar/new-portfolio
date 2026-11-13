@@ -1,3 +1,7 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import FooterQuote from './FooterQuote';
 
@@ -37,12 +41,18 @@ const socialLinks: NavLink[] = [
 const linkClass =
   'inline-flex items-center gap-2 text-gray-600 transition-colors duration-300 hover:text-black';
 
-const Footer = () => (
-  <footer className="font-jakarta relative overflow-hidden bg-[#f5f5f5] text-black">
+const Footer = () => {
+  const pathname = usePathname();
+  // On pages other than home, hash anchors need the home route prefix.
+  const homeHref = (href: string) =>
+    href.startsWith('#') && pathname !== '/' ? `/${href}` : href;
+
+  return (
+    <footer className="font-jakarta relative overflow-hidden bg-[#f5f5f5] text-black">
     <div className="relative z-10 mx-auto max-w-6xl px-3 pt-14 sm:px-4">
       <div className="grid grid-cols-2 gap-10 md:grid-cols-4 md:gap-8">
         <div className="col-span-2 flex flex-col gap-3 md:col-span-1">
-          <a href="#home" className="text-2xl font-bold tracking-tight">
+          <a href={homeHref('#home')} className="text-2xl font-bold tracking-tight">
             Zanathmar
           </a>
           <p className="max-w-xs text-sm leading-relaxed text-gray-600">
@@ -58,9 +68,9 @@ const Footer = () => (
           <ul className="flex flex-col gap-3 text-sm">
             {companyLinks.map((item) => (
               <li key={item.label}>
-                <a href={item.href} className={linkClass}>
+                <Link href={homeHref(item.href)} className={linkClass}>
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
             <li>
@@ -99,14 +109,18 @@ const Footer = () => (
       <div className="mt-10"></div>
     </div>
 
-    <Image
-      src="/assets/images/halftone_footer.png"
-      alt="footer"
-      width={2493}
-      height={1080}
-      className="relative z-0 -mt-10 h-auto w-full sm:-mt-16 lg:-mt-24"
-    />
+    <picture className="relative z-0 block -mt-10 sm:-mt-16 lg:-mt-24">
+      <source media="(max-width: 767px)" srcSet="/assets/images/footer_mobile.png" />
+      <Image
+        src="/assets/images/halftone_footer.png"
+        alt="footer"
+        width={2493}
+        height={1080}
+        className="h-auto w-full"
+      />
+    </picture>
   </footer>
-);
+  );
+};
 
 export default Footer;

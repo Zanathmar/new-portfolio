@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Footer from '../../components/Footer';
 
 export const metadata = {
   title: 'About — Zanathmar',
@@ -67,7 +68,8 @@ const offDuty = [
 
 export default function AboutPage() {
   return (
-    <main className="bg-[#f3f3f3] text-black">
+    <>
+      <main className="bg-[#f3f3f3] text-black">
       {/* intro */}
       <section className="relative px-4 pt-14 pb-10 tablet:px-6 tablet:pt-20 tablet:pb-16 desktop:px-20 desktop:pt-28 desktop:pb-20 overflow-hidden">
         <Link
@@ -238,5 +240,7 @@ export default function AboutPage() {
       {/* closing cta */}
       
     </main>
+      <Footer />
+    </>
   );
 }
